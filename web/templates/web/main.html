@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Main</title>
+    <title>Главная</title>
 </head>
 <body>
     <p>Hello</p>
+    {% if not user.is_anonymous %}
+    <b>Вы авторизованы как {{ user.username }}</b>
+    {% endif %}
 </body>
 </html>
