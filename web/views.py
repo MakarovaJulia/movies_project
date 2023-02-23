@@ -2,12 +2,17 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model, authenticate, login, logout
 
 from web.forms import RegistrationForm, AuthForm, MovieForm
+from web.models import Movie
 
 User = get_user_model()
 
 
 def main_view(request):
-    return render(request, "web/main.html")
+    movies = Movie.objects.all()
+    return render(request, "web/main.html",
+                  {
+                      'movies': movies
+                  })
 
 
 def registration_view(request):
@@ -49,4 +54,9 @@ def logout_view(request):
 
 def movies_add_view(request):
     form = MovieForm()
+    if request.method == 'POST':
+        form = MovieForm(data=request.POST, initial={"user": request.user})
+        if form.is_valid():
+            form.save()
+            return redirect("main")
     return render(request, "web/movies_form.html", {"form": form})

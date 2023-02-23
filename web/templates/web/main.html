@@ -5,4 +5,10 @@
     <b>Вы авторизованы как {{ user.username }}</b>
     {% endif %}
     <a href="{% url 'movies_add' %}">Создать фильм</a>
+
+    <ul>
+        {% for movie in movies %}
+            <li><b>{{ movie.title }}</b></li>
+        {% endfor %}
+    </ul>
 {% endblock %}

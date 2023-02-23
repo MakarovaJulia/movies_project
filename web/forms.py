@@ -26,6 +26,10 @@ class AuthForm(forms.Form):
 
 
 class MovieForm(forms.ModelForm):
+    def save(self, commit=True):
+        self.instance.user = self.initial['user']
+        return super().save(commit)
+
     class Meta:
         model = Movie
         fields = ('title',)
