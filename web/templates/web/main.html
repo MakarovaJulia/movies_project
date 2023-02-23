@@ -1,6 +1,5 @@
 {% extends 'web/base.html' %}
 {% block content %}
-    <p>Hello</p>
     {% if not user.is_anonymous %}
     <b>Вы авторизованы как {{ user.username }}</b>
     {% endif %}
@@ -8,7 +7,10 @@
 
     <ul>
         {% for movie in movies %}
-            <li><b>{{ movie.title }}</b></li>
+            <li>
+                <b>{{ movie.title }}</b>
+                <a href="{% url 'movies_edit' movie.id %}">Редактировать фильм</a>
+            </li>
         {% endfor %}
     </ul>
 {% endblock %}

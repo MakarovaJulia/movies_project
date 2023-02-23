@@ -52,8 +52,9 @@ def logout_view(request):
     return redirect('main')
 
 
-def movies_add_view(request):
-    form = MovieForm()
+def movies_edit_view(request, id=None):
+    movie = Movie.objects.get(id=id) if id is not None else None
+    form = MovieForm(instance=movie)
     if request.method == 'POST':
         form = MovieForm(data=request.POST, initial={"user": request.user})
         if form.is_valid():
