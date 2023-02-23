@@ -32,4 +32,4 @@ class MovieForm(forms.ModelForm):
 
     class Meta:
         model = Movie
-        fields = ('title',)
+        fields = ('title', 'image')
