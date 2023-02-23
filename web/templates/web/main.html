@@ -4,4 +4,5 @@
     {% if not user.is_anonymous %}
     <b>Вы авторизованы как {{ user.username }}</b>
     {% endif %}
+    <a href="{% url 'movies_add' %}">Создать фильм</a>
 {% endblock %}

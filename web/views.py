@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import get_user_model, authenticate, login, logout
 
-from web.forms import RegistrationForm, AuthForm
+from web.forms import RegistrationForm, AuthForm, MovieForm
 
 User = get_user_model()
 
@@ -45,3 +45,8 @@ def auth_view(request):
 def logout_view(request):
     logout(request)
     return redirect('main')
+
+
+def movies_add_view(request):
+    form = MovieForm()
+    return render(request, "web/movies_form.html", {"form": form})
