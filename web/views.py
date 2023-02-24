@@ -19,7 +19,11 @@ def main_view(request):
     if filters['search']:
         movies = movies.filter(title__icontains=filters['search'])
 
+    if filters['release_date']:
+        movies = movies.filter(release_date__gte=filters['release_date'])
+
     total_count = movies.count()
+    movies = movies.prefetch_related("genres").select_related("user")
 
     page_number = request.GET.get("page", 1)
     paginator = Paginator(movies, per_page=10)

@@ -11,10 +11,12 @@
         <b>Фильтры:</b>
         <br>
         {% for field in filter_form %}
+            {{ field.label }}
             {{ field }}
         {% endfor %}
 
         <button>Найти</button>
+        <a href="?">Показать все</a>
     </form>
 
     <br>
@@ -22,10 +24,17 @@
     <ul>
         {% for movie in movies %}
             <li>
+                {{ movie.user.username }}
+            <br>
                 <b>{{ movie.title }}</b>
+                {% if movie.genres.all %}
+                    [{% for genre in movie.genres.all %} {{ genre.title }} {% endfor %}]
+                {% endif %}
+                <small>{{ movie.release_date }}</small>
                 <a href="{% url 'movies_edit' movie.id %}">Редактировать фильм</a>
                 <a href="{% url 'movie_delete' movie.id %}">Удалить фильм</a>
             </li>
+            <hr>
         {% endfor %}
     </ul>
 
