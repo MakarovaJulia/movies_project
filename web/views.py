@@ -7,6 +7,7 @@ from django.contrib.auth import get_user_model, authenticate, login, logout
 
 from web.forms import RegistrationForm, AuthForm, MovieForm, MovieGenreForm, MovieFilterForm
 from web.models import Movie, MovieGenre
+from web.services import filter_movies
 
 User = get_user_model()
 
@@ -16,13 +17,7 @@ def main_view(request):
     movies = Movie.objects.filter(user=request.user).order_by('title')
     filter_form = MovieFilterForm(request.GET)
     filter_form.is_valid()
-    filters = filter_form.cleaned_data
-
-    if filters['search']:
-        movies = movies.filter(title__icontains=filters['search'])
-
-    if filters['release_date']:
-        movies = movies.filter(release_date__gte=filters['release_date'])
+    movies = filter_movies(movies, filter_form.cleaned_data)
 
     total_count = movies.count()
     movies = movies.prefetch_related("genres").select_related("user").annotate(
