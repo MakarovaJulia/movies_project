@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth import get_user_model
 
-from web.models import Movie
+from web.models import Movie, MovieGenre
 
 User = get_user_model()
 
@@ -32,4 +32,14 @@ class MovieForm(forms.ModelForm):
 
     class Meta:
         model = Movie
-        fields = ('title', 'image')
+        fields = ('title', 'image', 'genres')
+
+
+class MovieGenreForm(forms.ModelForm):
+    def save(self, commit=True):
+        self.instance.user = self.initial['user']
+        return super().save(commit)
+
+    class Meta:
+        model = MovieGenre
+        fields = ('title',)
