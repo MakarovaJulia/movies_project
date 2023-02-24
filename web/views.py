@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model, authenticate, login, logout
 
 from web.forms import RegistrationForm, AuthForm, MovieForm, MovieGenreForm
@@ -7,8 +8,9 @@ from web.models import Movie, MovieGenre
 User = get_user_model()
 
 
+@login_required
 def main_view(request):
-    movies = Movie.objects.all()
+    movies = Movie.objects.filter(user=request.user).order_by('title')
     return render(request, "web/main.html",
                   {
                       'movies': movies
@@ -52,8 +54,9 @@ def logout_view(request):
     return redirect('main')
 
 
+@login_required
 def movies_edit_view(request, id=None):
-    movie = Movie.objects.get(id=id) if id is not None else None
+    movie = get_object_or_404(Movie, user=request.user, id=id) if id is not None else None
     form = MovieForm(instance=movie)
     if request.method == 'POST':
         form = MovieForm(data=request.POST, files=request.FILES, initial={"user": request.user})
@@ -63,12 +66,20 @@ def movies_edit_view(request, id=None):
     return render(request, "web/movies_form.html", {"form": form})
 
 
+@login_required
+def movie_delete_view(request, id):
+    movie = get_object_or_404(Movie, user=request.user, id=id)
+    movie.delete()
+    return redirect('main')
+
+
 def genres_view(request):
     return _list_editor_view(request, MovieGenre, MovieGenreForm, "genres", "genres")
 
 
+@login_required
 def genre_delete_view(request, id):
-    genre = MovieGenre.objects.get(id=id)
+    genre = get_object_or_404(MovieGenre, id=id)
     genre.delete()
     return redirect('genres')
 

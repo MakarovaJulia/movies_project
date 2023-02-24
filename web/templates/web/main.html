@@ -10,6 +10,7 @@
             <li>
                 <b>{{ movie.title }}</b>
                 <a href="{% url 'movies_edit' movie.id %}">Редактировать фильм</a>
+                <a href="{% url 'movie_delete' movie.id %}">Удалить фильм</a>
             </li>
         {% endfor %}
     </ul>
