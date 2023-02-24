@@ -26,6 +26,8 @@ class AuthForm(forms.Form):
 
 
 class MovieForm(forms.ModelForm):
+    release_date = forms.DateTimeField(widget=forms.DateTimeInput(attrs={"type": "datetime-local"}))
+
     def save(self, commit=True):
         self.instance.user = self.initial['user']
         return super().save(commit)

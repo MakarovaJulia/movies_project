@@ -48,6 +48,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'movies_project.debug.SqlPrintingMiddleware'
+
 ]
 
 ROOT_URLCONF = 'movies_project.urls'
