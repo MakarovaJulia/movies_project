@@ -1,8 +1,9 @@
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model, authenticate, login, logout
 
-from web.forms import RegistrationForm, AuthForm, MovieForm, MovieGenreForm
+from web.forms import RegistrationForm, AuthForm, MovieForm, MovieGenreForm, MovieFilterForm
 from web.models import Movie, MovieGenre
 
 User = get_user_model()
@@ -11,9 +12,23 @@ User = get_user_model()
 @login_required
 def main_view(request):
     movies = Movie.objects.filter(user=request.user).order_by('title')
+    filter_form = MovieFilterForm(request.GET)
+    filter_form.is_valid()
+    filters = filter_form.cleaned_data
+
+    if filters['search']:
+        movies = movies.filter(title__icontains=filters['search'])
+
+    total_count = movies.count()
+
+    page_number = request.GET.get("page", 1)
+    paginator = Paginator(movies, per_page=10)
+
     return render(request, "web/main.html",
                   {
-                      'movies': movies
+                      'movies': paginator.get_page(page_number),
+                      'filter_form': filter_form,
+                      'total_count': total_count
                   })
 
 

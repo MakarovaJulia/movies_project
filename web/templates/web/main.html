@@ -5,6 +5,20 @@
     {% endif %}
     <a href="{% url 'movies_add' %}">Создать фильм</a>
     <a href="{% url 'genres' %}">Жанры</a>
+    <br>
+
+    <form action="">
+        <b>Фильтры:</b>
+        <br>
+        {% for field in filter_form %}
+            {{ field }}
+        {% endfor %}
+
+        <button>Найти</button>
+    </form>
+
+    <br>
+    всего {{ total_count }} записей
     <ul>
         {% for movie in movies %}
             <li>
@@ -14,4 +28,18 @@
             </li>
         {% endfor %}
     </ul>
+
+    <nav>
+        {% if movies.has_previous %}
+            <a href="?page=1">в начало</a>
+            <a href="?page={{ movies.previous_page_number }}">назад</a>
+        {% endif %}
+
+        страница {{ movies.number }} из {{ movies.paginator.num_pages }}
+
+        {% if movies.has_next %}
+            <a href="?page={{ movies.next_page_number }}">вперед</a>
+            <a href="?page={{ movies.paginator.num_pages }}">в конец</a>
+        {% endif %}
+    </nav>
 {% endblock %}

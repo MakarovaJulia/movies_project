@@ -45,3 +45,14 @@ class MovieGenreForm(forms.ModelForm):
     class Meta:
         model = MovieGenre
         fields = ('title',)
+
+
+class MovieFilterForm(forms.Form):
+    search = forms.CharField(label='', widget=forms.TextInput(attrs={"placeholder": "Поиск"}), required=False)
+    release_date = forms.DateTimeField(
+        label="дата выпуска",
+        widget=forms.DateTimeInput(
+            attrs={"type": "datetime-local"}, format='%Y-%m-%dT%H:%M'
+        ),
+        required=False
+    )
