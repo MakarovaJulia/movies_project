@@ -1,5 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
+from django.db.models import Count, Max, Min
+from django.db.models.functions import TruncDate
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import get_user_model, authenticate, login, logout
 
@@ -23,7 +25,9 @@ def main_view(request):
         movies = movies.filter(release_date__gte=filters['release_date'])
 
     total_count = movies.count()
-    movies = movies.prefetch_related("genres").select_related("user")
+    movies = movies.prefetch_related("genres").select_related("user").annotate(
+        genres_count=Count("genres")
+    )
 
     page_number = request.GET.get("page", 1)
     paginator = Paginator(movies, per_page=10)
@@ -34,6 +38,27 @@ def main_view(request):
                       'filter_form': filter_form,
                       'total_count': total_count
                   })
+
+
+@login_required
+def analytics_view(request):
+    overall_stat = Movie.objects.aggregate(
+        Count("id"),
+        Max("release_date"),
+        Min("release_date")
+    )
+    days_stat = (
+        Movie.objects.all()
+        .annotate(data=TruncDate("release_date"))
+        .values("release_date")
+        .annotate(count=Count("id"))
+        .order_by("-release_date")
+    )
+    print(days_stat)
+    return render(request, "web/analytics.html", {
+        "overall_stat": overall_stat,
+        "days_stat": days_stat
+    })
 
 
 def registration_view(request):

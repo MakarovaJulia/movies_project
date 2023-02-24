@@ -1,0 +1,18 @@
+{% extends 'web/base.html' %}
+{% block content %}
+    <h1>Аналитика</h1>
+    <p>
+        Всего <b>{{ overall_stat.id__count }}</b> фильмов <br>
+        Максимальная дата релиза: <b>{{ overall_stat.release_date__max }}</b><br>
+        Минимальная дата релиза: <b>{{ overall_stat.release_date__min }}</b><br>
+    </p>
+
+    <b>Статистика по дням</b>
+    <ul>
+    {% for day_stat in days_stat %}
+        <li>
+           <b>{{ day_stat.release_date }}</b> - {{ day_stat.count }} фильмов
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock %}

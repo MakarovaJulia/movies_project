@@ -5,6 +5,7 @@
     {% endif %}
     <a href="{% url 'movies_add' %}">Создать фильм</a>
     <a href="{% url 'genres' %}">Жанры</a>
+    <a href="{% url 'analytics' %}">Аналитика</a>
     <br>
 
     <form action="">
@@ -29,6 +30,7 @@
                 <b>{{ movie.title }}</b>
                 {% if movie.genres.all %}
                     [{% for genre in movie.genres.all %} {{ genre.title }} {% endfor %}]
+
                 {% endif %}
                 <small>{{ movie.release_date }}</small>
                 <a href="{% url 'movies_edit' movie.id %}">Редактировать фильм</a>
