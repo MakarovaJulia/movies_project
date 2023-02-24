@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth import get_user_model
 
+from web.models import Movie, MovieGenre
+
 User = get_user_model()
 
 
@@ -21,3 +23,25 @@ class RegistrationForm(forms.ModelForm):
 class AuthForm(forms.Form):
     username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput())
+
+
+class MovieForm(forms.ModelForm):
+    release_date = forms.DateTimeField(widget=forms.DateTimeInput(attrs={"type": "datetime-local"}))
+
+    def save(self, commit=True):
+        self.instance.user = self.initial['user']
+        return super().save(commit)
+
+    class Meta:
+        model = Movie
+        fields = ('title', 'release_date', 'image', 'genres')
+
+
+class MovieGenreForm(forms.ModelForm):
+    def save(self, commit=True):
+        self.instance.user = self.initial['user']
+        return super().save(commit)
+
+    class Meta:
+        model = MovieGenre
+        fields = ('title',)

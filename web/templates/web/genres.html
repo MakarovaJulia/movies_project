@@ -1,0 +1,22 @@
+{% extends 'web/base.html' %}
+{% block content %}
+    <h1>Жанры</h1>
+    <ul>
+          {% for genre in items %}
+            <li>
+                <b>{{ genre.title }}</b>
+                <small>
+                    <a href="{% url 'genre_delete' genre.id %}">Удалить жанр</a>
+                </small>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <b>Добавление жанра</b>
+    <form action="" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button>Добавить</button>
+    </form>
+
+{% endblock %}
